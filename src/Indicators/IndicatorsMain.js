@@ -8,13 +8,10 @@ import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
-// import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 
 import { saveJsonFile } from './Functions.js';
 import { indicators, indicatorsFileName } from './../Generic/Constants.js';
-
-import  { FirebaseContext } from './../Firebase';
 
 // TODO - Refactorizar
 import RSI from './RSI.js';
