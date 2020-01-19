@@ -1,4 +1,5 @@
 import React from 'react';
+import firebase from 'firebase'
 
 import CardContent from '@material-ui/core/CardContent';
 import { makeStyles } from '@material-ui/core/styles';
@@ -10,7 +11,7 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import Grid from '@material-ui/core/Grid';
 
-import { saveJsonFile } from './Functions.js';
+import { saveDataFirebase } from './Functions.js';
 import { indicators, indicatorsFileName } from './../Generic/Constants.js';
 
 // TODO - Refactorizar
@@ -36,8 +37,39 @@ export default class IndicatorsCardContent extends React.Component {
     }
 
     saveIndicator(content){
-        saveJsonFile(content, indicatorsFileName)
+        const db = firebase.firestore();
+
+        var count = db.collection("indicators").doc("indicators-count").get()
+            .then((doc) => {
+                if (doc.exists){
+                    var newCount = doc.data().Count + 1;
+                    // console.log("Document data:", doc.data());
+                    // var document = {}
+                    var docId = "IND00" + newCount;
+                    content.id = docId;
+                    // document[docId] = content
+                    // document.push()
+                    saveDataFirebase("indicators", docId, content, "indicators-count", newCount);
+                    // console.log(docContent);
+                }
+                else
+                    console.log("No such document!");
+            })
+            .catch((error) => {
+                console.log("Error getting document:", error);
+            });
+        // saveJsonFile(content, indicatorsFileName)
+        // saveDataFirebase("indicators", indicator);
+        // console.log(count);
+
+    //     db.collection("indicators").get().then((querySnapshot) => {
+    // querySnapshot.forEach((doc) => {
+    //     console.log(`${doc.id} => ${doc.data()}`);
+    // });
+// });
     }
+
+
 
     render(){
         const classes = makeStyles(theme => ({

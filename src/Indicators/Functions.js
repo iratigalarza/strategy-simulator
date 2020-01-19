@@ -29,12 +29,6 @@ export function downloadJsonFile(content, fileName){
 }
 
 export function saveJsonFile(content, fileName){
-    // let ref = firebase.storage().ref().child(fileName + '.json')
-    // let file = new Blob([JSON.stringify(content)], {type: 'application/json'})
-    // ref.put(file).then((snap) => {
-    //     console.log('Uploaded!')
-    // })
-
     let ref = firebase.storage().ref().child("message")
     var message = 'This is my message.';
     ref.putString(message).then(function(snapshot) {
@@ -43,6 +37,30 @@ export function saveJsonFile(content, fileName){
 
 }
 
+
+export function saveDataFirebase(collection, docId, content, countDocument, newCount){
+    const db = firebase.firestore();
+
+    db.collection(collection).doc(docId).set(content)
+    .then(() => {
+        console.log("Document uploaded!!");
+
+        db.collection(collection).doc(countDocument).set({
+                Count: newCount
+        })
+        .then(() => {
+            console.log("Count updated!!");
+        })
+        .catch((error) => {
+            console.log("Error updating count: " + error);
+        });
+
+
+    })
+    .catch((error) => {
+        console.log("Error adding document: " + error);
+    });
+}
 
 export function getIndicatorStructure(type, name, parameters){
     return {
